@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "pnpm -r --parallel dev",
+    "build": "pnpm prisma:generate && pnpm --filter backend build",
+    "start": "node backend/dist/index.js",
     "prisma:generate": "pnpm --filter backend prisma:generate",
     "prisma:push": "pnpm --filter backend prisma:push",
     "test": "echo \"Error: no test specified\" && exit 1"
