@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  /* Phase 1 Precise Color Palette */
+  --bg-dark-1: #070707;
+  --bg-dark-2: #0B0B0F;
+  --bg-dark-3: #101014;
+  
+  --accent-emerald: #00F5B4;
+  --accent-blue: #4D7CFE;
+  --accent-purple: #8B5CF6;
+  --accent-danger: #FF5D73;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #A1A1AA;
+  --text-muted: #52525B;
+
+  /* Typography Scales */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-tech: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Floating border colors */
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-glass-hover: rgba(255, 255, 255, 0.16);
+}
+
+body {
+  background: linear-gradient(to bottom, var(--bg-dark-1), var(--bg-dark-2));
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* 8. Component Identity - Rounded + Floating + Soft Border + Glow Accent */
+.glass-card {
+  background: rgba(10, 10, 12, 0.90);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-glass);
+  border-radius: 28px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-6px);
+  background: rgba(15, 15, 18, 0.95);
+  border-color: var(--border-glass-hover);
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 255, 255, 0.02);
+}
+
+/* Cinematic Spotlight lighting systems */
+.spotlight-top-left {
+  background: radial-gradient(circle at top left, rgba(0, 245, 180, 0.12), transparent 45%);
+}
+
+.spotlight-top-right {
+  background: radial-gradient(circle at top right, rgba(77, 124, 254, 0.12), transparent 45%);
+}
+
+.spotlight-center-purple {
+  background: radial-gradient(circle 400px at center, rgba(139, 92, 246, 0.08), transparent 80%);
+}
+
+.spotlight-glow {
+  background: radial-gradient(circle 300px at var(--x, 50%) var(--y, 50%), rgba(0, 245, 180, 0.08), transparent 85%);
+}
+
+/* Background grid overlay */
+.bg-grid {
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+}
+
+/* Noise overlay */
+.bg-noise {
+  position: relative;
+}
+.bg-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.012;
+  pointer-events: none;
+  z-index: -30;
+}
+
+
+/* Premium Selection style */
+::selection {
+  background: rgba(0, 245, 180, 0.2);
+  color: #00F5B4;
+}
+
+/* Hide scrollbars globally */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+@layer base {
+  :root {
+    --gradient-color: #8350e8;
+    --sparkles-color: #8350e8;
+  }
+
+  .dark {
+    --gradient-color: #8350e8;
+    --sparkles-color: #ffffff;
+  }
+}
+

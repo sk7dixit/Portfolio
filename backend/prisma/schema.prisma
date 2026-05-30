@@ -1,0 +1,388 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  PORTFOLIO_USER
+}
+
+model User {
+  id             String            @id @default(uuid())
+  name           String
+  email          String            @unique
+  password       String
+  role           Role              @default(PORTFOLIO_USER)
+  portfolioSlug  String            @unique @map("portfolio_slug")
+  themeId        String?           @map("theme_id")
+  theme          Theme?            @relation(fields: [themeId], references: [id])
+  profile        PortfolioProfile?
+  projects       Project[]
+  skills         Skill[]
+  certificates   Certificate[]
+  internships    Internship[]
+  messages       Message[]
+  notifications  Notification[]
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model PortfolioProfile {
+  id                 String      @id @default(uuid())
+  userId             String      @unique @map("user_id")
+  user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  headline           String
+  bio                String      @db.Text
+  resumeUrl          String?     @map("resume_url")
+  profileImage       String?     @map("profile_image")
+  github             String?
+  linkedin           String?
+  twitter            String?
+  location           String?     @default("India")
+  availabilityStatus String?     @default("Available") @map("availability_status")
+  heroSection        Json?       @map("hero_section")
+  techStack          String[]    @map("tech_stack")
+  statsCards         Json?       @map("stats_cards")
+  expertiseCards     Json?       @map("expertise_cards")
+  skillsSection      Json?       @map("skills_section")
+  projectsSection    Json?       @map("projects_section")
+  certificatesSection Json?      @map("certificates_section")
+  internshipsSection Json?       @map("internships_section")
+  achievementsSection Json?      @map("achievements_section")
+  journeySection      Json?      @map("journey_section")
+  contactSection      Json?      @map("contact_section")
+  headerSection       Json?       @map("header_section")
+  footerSection       Json?       @map("footer_section")
+  themeSection        Json?       @map("theme_section")
+  versionHistory      Json?       @default("[]") @map("version_history")
+  aiSection           Json?       @map("ai_section")
+  analytics          Analytics[]
+  createdAt          DateTime    @default(now()) @map("created_at")
+  updatedAt          DateTime    @updatedAt @map("updated_at")
+
+  @@map("portfolio_profiles")
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String   @db.Text
+  techStack   String[] @map("tech_stack")
+  githubUrl   String?  @map("github_url")
+  liveUrl     String?  @map("live_url")
+  thumbnail   String?
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("projects")
+}
+
+model Skill {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skillName  String   @map("skill_name")
+  skillLevel Int      @default(5) @map("skill_level")
+  category   String
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("skills")
+}
+
+model Certificate {
+  id               String   @id @default(uuid())
+  userId           String   @map("user_id")
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title            String
+  organization     String
+  issueDate        String   @map("issue_date")
+  credentialLink   String?  @map("credential_link")
+  certificateImage String?  @map("certificate_image")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("certificates")
+}
+
+model Internship {
+  id                 String   @id @default(uuid())
+  userId             String   @map("user_id")
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName        String   @map("company_name")
+  role               String
+  duration           String
+  responsibilities   String[]
+  technologiesUsed   String[] @map("technologies_used")
+  internshipDocument String?  @map("internship_document")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@map("internships")
+}
+
+model Message {
+  id             String   @id @default(uuid())
+  userId         String   @map("user_id")
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  senderName     String   @map("sender_name")
+  email          String
+  subject        String
+  category       String?  @default("GENERAL")
+  message        String   @db.Text
+  priority       String?  @default("MEDIUM")
+  tags           String[] @default([])
+  status         String?  @default("unread")
+  read           Boolean  @default(false)
+  sourcePage     String?  @map("source_page")
+  location       String?
+  device         String?
+  browser        String?
+  viewedProjects String[] @default([]) @map("viewed_projects")
+  leadScore      Int?     @default(50) @map("lead_score")
+  replies        Json?    @default("[]")
+  notes          String?  @db.Text
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("messages")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   // "message" | "upload" | "system"
+  priority  String?  @default("MEDIUM")
+  metadata  Json?    @default("{}")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("notifications")
+}
+
+model Theme {
+  id             String   @id @default(uuid())
+  themeName      String   @map("theme_name")
+  primaryColor   String   @map("primary_color")
+  backgroundType String   @map("background_type")
+  fontFamily     String   @map("font_family")
+  animationType  String   @map("animation_type")
+  users          User[]
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("themes")
+}
+
+model Analytics {
+  id             String           @id @default(uuid())
+  portfolioId    String           @map("portfolio_id")
+  profile        PortfolioProfile @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  visitorIp      String           @map("visitor_ip")
+  country        String           @default("Unknown")
+  device         String           @default("Desktop")
+  browser        String?          @default("Unknown")
+  visitTime      DateTime         @default(now()) @map("visit_time")
+  clickedProject String?          @map("clicked_project")
+
+  @@map("analytics")
+}
+
+model KSExperienceEntry {
+  id                String   @id @default(uuid())
+  tenant            String   @default("KS")
+  companyName       String   @map("company_name")
+  roleTitle         String   @map("role_title")
+  employmentType    String   @map("employment_type")
+  location          String
+  workMode          String   @map("work_mode") // Remote, Hybrid, On-site
+  startDate         String   @map("start_date")
+  endDate           String   @map("end_date")
+  currentWorking    Boolean  @default(false) @map("current_working")
+  tagline           String   @db.Text
+  description       String   @db.Text
+  techStack         String[] @map("tech_stack")
+  metrics           Json     @default("[]") // Array of { label: string, value: string }
+  coverImage        String?  @map("cover_image")
+  backgroundImage   String?  @map("background_image")
+  logo              String?
+  accentColor       String?  @map("accent_color")
+  themeVariant      String?  @map("theme_variant") // dark, neon, glass
+  buttonText        String?  @map("button_text")
+  buttonUrl         String?  @map("button_url")
+  openInNewTab      Boolean  @default(false) @map("open_in_new_tab")
+  timelineOrder     Int      @default(0) @map("timeline_order")
+  timelineVisible   Boolean  @default(true) @map("timeline_visible")
+  timelineHighlight Boolean  @default(false) @map("timeline_highlight")
+  timelineDotColor  String?  @map("timeline_dot_color")
+  featured          Boolean  @default(false)
+  published         Boolean  @default(true)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@map("ks_experience_entries")
+}
+
+model KSCertificate {
+  id                       String   @id @default(uuid())
+  tenant                   String   @default("KS")
+  title                    String
+  issuer                   String
+  credentialId             String   @map("credential_id")
+  issueDate                String   @map("issue_date") // month/year
+  expiryDate               String?  @map("expiry_date")
+  neverExpires             Boolean  @default(true) @map("never_expires")
+  shortDescription         String   @db.Text @map("short_description")
+  detailedDescription      String   @db.Text @map("detailed_description")
+  
+  artwork                  String?
+  modalImage               String?  @map("modal_image")
+  accentColor              String?  @map("accent_color")
+  glowColor                String?  @map("glow_color")
+  themeStyle               String   @default("glass-dark") @map("theme_style") // neon, gold, cyan, violet, glass-dark
+  
+  skills                   String[]
+  
+  verificationEnabled      Boolean  @default(false) @map("verification_enabled")
+  verificationUrl          String?  @map("verification_url")
+  verifiedProofBadge       Boolean  @default(false) @map("verified_proof_badge")
+  certificatePdf           String?  @map("certificate_pdf")
+  
+  modalLearningOutcomes    String?  @db.Text @map("modal_learning_outcomes")
+  modalSkillDomainsHeading  String?  @map("modal_skill_domains_heading")
+  modalExtraNotes          String?  @db.Text @map("modal_extra_notes")
+  modalAchievementLevel    String?  @map("modal_achievement_level")
+  
+  featured                 Boolean  @default(false)
+  published                Boolean  @default(true)
+  displayOrder             Int      @default(0) @map("display_order")
+  showInHero               Boolean  @default(true) @map("show_in_hero")
+  enableModal              Boolean  @default(true) @map("enable_modal")
+  
+  createdAt                DateTime @default(now()) @map("created_at")
+  updatedAt                DateTime @updatedAt @map("updated_at")
+
+  @@map("ks_certificates")
+}
+
+model KSCertificateHeroCMS {
+  id                String   @id @default(uuid())
+  tenant            String   @default("KS")
+  badgeText         String   @map("badge_text")
+  mainHeading       String   @map("main_heading")
+  subtitle          String   @db.Text
+  accentColor       String   @map("accent_color")
+  bgOverlayStrength Float    @default(0.5) @map("bg_overlay_strength")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@map("ks_certificates_hero_cms")
+}
+
+model KSContactCMS {
+  id             String   @id @default(uuid())
+  tenant         String   @default("KS")
+  hero           Json     @default("{}")
+  quoteCard      Json     @default("{}")
+  footerInfo     Json     @default("{}")
+  socialLinks    Json     @default("[]")
+  visualSettings Json     @default("{}")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("ks_contact_cms")
+}
+
+model KSMessage {
+  id        String   @id @default(uuid())
+  tenant    String   @default("KS")
+  name      String
+  email     String
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  archived  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("ks_messages")
+}
+
+model SDContactCMS {
+  id             String   @id @default(uuid())
+  tenant         String   @default("SD")
+  hero           Json     @default("{}")
+  profileCard    Json     @default("{}")
+  contactDetails Json     @default("{}")
+  socialCards    Json     @default("[]")
+  formSettings   Json     @default("{}")
+  visualSettings Json     @default("{}")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("sd_contact_cms")
+}
+
+model SDMessage {
+  id        String   @id @default(uuid())
+  tenant    String   @default("SD")
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  archived  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("sd_messages")
+}
+
+model MSBrandIdentity {
+  id              String   @id @default(uuid())
+  tenant          String   @default("MS")
+  navbar          Json     @default("{}")
+  hero            Json     @default("{}")
+  biography       Json     @default("{}")
+  ctas            Json     @default("{}")
+  backgroundMedia Json     @default("{}")
+  aboutSection    Json     @default("{}")
+  timeline        Json     @default("[]")
+  overviewCard    Json     @default("{}")
+  visualSettings  Json     @default("{}")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("ms_brand_identity")
+}
+
+model MSGlobalExperience {
+  id        String   @id @default(uuid())
+  tenant    String   @default("MS")
+  header    Json     @default("{}")
+  footer    Json     @default("{}")
+  sections  Json     @default("[]")
+  theme     Json     @default("{}")
+  layout    Json     @default("{}")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("ms_global_experience")
+}
+
+
+
+
+

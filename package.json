@@ -1,0 +1,13 @@
+{
+  "name": "${PROJECT_NAME}",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "prisma:generate": "pnpm --filter backend prisma:generate",
+    "prisma:push": "pnpm --filter backend prisma:push",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true
+}

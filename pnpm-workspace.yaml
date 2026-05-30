@@ -1,0 +1,6 @@
+packages:
+  - 'backend'
+  - 'admin-frontend'
+  - 'sd-frontend'
+  - 'ms-frontend'
+  - 'ks-frontend'

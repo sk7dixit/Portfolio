@@ -1,0 +1,37 @@
+{
+  "theme": "dark",
+  "animations": true,
+  "blurIntensity": 8,
+  "notificationSounds": true,
+  "telemetryMode": "active",
+  "smtp": {
+    "provider": "Resend",
+    "host": "smtp.resend.com",
+    "port": 465,
+    "user": "resend",
+    "status": "CONNECTED"
+  },
+  "storage": {
+    "provider": "Cloudinary",
+    "bucketName": "portfolio-uploads",
+    "status": "ACTIVE"
+  },
+  "security": {
+    "sessionTimeout": 60,
+    "adminAuth": "JWT",
+    "ipRestrictions": false,
+    "loginAlerts": true
+  },
+  "ai": {
+    "leadSensitivity": 75,
+    "aiResponseDepth": "advanced",
+    "autoTagging": true,
+    "signalClassification": true
+  },
+  "system": {
+    "environment": "development",
+    "frontendUrl": "http://localhost:3001",
+    "backendHealth": "HEALTHY",
+    "region": "ap-south-1"
+  }
+}
