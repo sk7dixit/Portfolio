@@ -18,7 +18,7 @@ import { CoreSpinLoader } from './components/ui/core-spin-loader';
 import { BackgroundSystem } from './components/ui/BackgroundSystem';
 
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || (import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:5000/api');
 
 const LOCAL_FALLBACK_DATA = {
   user: {
@@ -159,7 +159,7 @@ export default function App() {
     loadPortfolioData(querySlug);
 
     // Establish Socket.IO synchronization connection
-    const socket = io('http://localhost:5000');
+    const socket = io(import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000');
     
     socket.emit('portfolio:join', querySlug);
 
@@ -293,7 +293,7 @@ export default function App() {
       <div className="min-h-screen bg-[#070708] text-red-400 font-mono flex flex-col justify-center items-center gap-4 select-none">
         <p className="text-xs uppercase tracking-widest font-black">❌ Port Error: Portfolio Slug Not Registered</p>
         <span className="text-[9px] text-neutral-500">Slug path checked: "/slug/{slug}"</span>
-        <a href="http://localhost:3000" className="px-4 py-2 border border-red-500/20 bg-red-500/5 text-[10px] text-red-400 rounded-xl hover:bg-red-500/10 mt-2 font-bold transition-all uppercase tracking-wider">
+        <a href={import.meta.env.VITE_ADMIN_URL || "http://localhost:3000"} className="px-4 py-2 border border-red-500/20 bg-red-500/5 text-[10px] text-red-400 rounded-xl hover:bg-red-500/10 mt-2 font-bold transition-all uppercase tracking-wider">
           Setup profile in Admin Panel
         </a>
       </div>

@@ -158,7 +158,7 @@ export default function HomeTab({ user, profile, setActiveTab }: HomeTabProps) {
   
   // Portfolios backend base image url resolving
   const heroImg = heroData?.image
-    ? (heroData.image.startsWith('http') ? heroData.image : `http://localhost:5000${heroData.image}`)
+    ? (heroData.image.startsWith('http') ? heroData.image : `${import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000'}${heroData.image}`)
     : shashwatPortrait;
 
   const activeTechStack = profile?.techStack && profile.techStack.length > 0 

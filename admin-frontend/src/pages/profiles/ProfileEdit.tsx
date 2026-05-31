@@ -871,7 +871,7 @@ export default function ProfileEdit() {
   const previewSlug = activePortfolio;
   let defaultFolder = previewSlug === 'shashwat' ? 'sd' : (previewSlug === 'khushaboo' ? 'ks' : 'ms');
   const previewImg = heroSection.image 
-    ? (heroSection.image.startsWith('http') ? heroSection.image : `http://localhost:5000${heroSection.image}`)
+    ? (heroSection.image.startsWith('http') ? heroSection.image : `${import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000'}${heroSection.image}`)
     : `/uploads/portfolio/${defaultFolder}/hero-image.webp`;
 
   const fallbackUrl = previewSlug === 'shashwat'
@@ -1841,7 +1841,7 @@ export default function ProfileEdit() {
             {/* Realtime Video Background Simulation */}
             {(() => {
               const rawVideo = themeSection.visualIdentity?.videoBackground?.videoUrl || "/khushboo-trim.mp4";
-              const actualVideoUrl = rawVideo.startsWith('/uploads') ? `http://localhost:5000${rawVideo}` : rawVideo;
+              const actualVideoUrl = rawVideo.startsWith('/uploads') ? `${import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000'}${rawVideo}` : rawVideo;
               const overlayDarkness = themeSection.visualIdentity?.overlayControl?.darkness ?? 75;
               const overlayBlur = themeSection.visualIdentity?.overlayControl?.blur ?? 0;
               const vignetteIntensity = themeSection.visualIdentity?.overlayControl?.vignette ?? 80;

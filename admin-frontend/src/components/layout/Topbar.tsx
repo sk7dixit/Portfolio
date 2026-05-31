@@ -181,7 +181,7 @@ export default function Topbar({ activeTab, setActiveTab, sidebarExpanded, setSi
   // Real-time socket sync connection
   useEffect(() => {
     if (user?.portfolioSlug) {
-      const socket = io('http://localhost:5000');
+      const socket = io(import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000');
       socket.emit('portfolio:join', user.portfolioSlug);
 
       socket.on('notification:received', (notif: any) => {

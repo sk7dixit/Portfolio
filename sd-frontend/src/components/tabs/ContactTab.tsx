@@ -12,7 +12,7 @@ import { GlassCard } from '../ui/GlassCard';
 import { typography } from '../../styles/tokens';
 import shashwatPortrait from '../../assets/shashwat_portrait.jpg';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || (import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:5000/api');
 
 const DEFAULT_CMS = {
   hero: {
@@ -99,7 +99,7 @@ export default function ContactTab({ user, slug, profile }: ContactTabProps) {
     loadCMS();
 
     // Hook up real-time socket updates for CMS configurations
-    const socket = io('http://localhost:5000');
+    const socket = io(import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000');
     socket.emit('portfolio:join', 'shashwat');
 
     socket.on('communication_sd:updated', (payload) => {

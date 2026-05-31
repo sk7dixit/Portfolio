@@ -34,7 +34,7 @@ export default function ExperienceStudio() {
   // Hook up websockets for live-experience sync updates
   useEffect(() => {
     if (user?.portfolioSlug) {
-      const s = io('http://localhost:5000');
+      const s = io(import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000');
       s.emit('portfolio:join', user.portfolioSlug);
       setSocket(s);
       return () => {
@@ -1159,7 +1159,7 @@ export default function ExperienceStudio() {
             {/* Realtime Video Background Simulation */}
             {(() => {
               const rawVideo = profile?.themeSection?.visualIdentity?.videoBackground?.videoUrl || "/khushboo-trim.mp4";
-              const actualVideoUrl = rawVideo.startsWith('/uploads') ? `http://localhost:5000${rawVideo}` : rawVideo;
+              const actualVideoUrl = rawVideo.startsWith('/uploads') ? `${import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000'}${rawVideo}` : rawVideo;
               const overlayDarkness = profile?.themeSection?.visualIdentity?.overlayControl?.darkness ?? 75;
               const overlayBlur = profile?.themeSection?.visualIdentity?.overlayControl?.blur ?? 0;
               const vignetteIntensity = profile?.themeSection?.visualIdentity?.overlayControl?.vignette ?? 80;
@@ -2083,7 +2083,7 @@ export default function ExperienceStudio() {
                 opacity: 1 - (msCinematicDarkness / 100)
               }}
             >
-              <source src="http://localhost:5000/uploads/portfolio/ms/mahi.mp4" type="video/mp4" />
+              <source src={`${import.meta.env.VITE_SOCKET_URL || "http://localhost:5000"}/uploads/portfolio/ms/mahi.mp4`} type="video/mp4" />
               <source src="/mahi.mp4" type="video/mp4" />
             </video>
             {/* Cinematic layered overlay */}

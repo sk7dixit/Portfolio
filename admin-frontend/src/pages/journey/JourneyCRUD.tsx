@@ -79,7 +79,7 @@ export default function JourneyCRUD() {
   // Socket sync setup
   useEffect(() => {
     if (user?.portfolioSlug) {
-      const s = io('http://localhost:5000');
+      const s = io(import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000');
       s.emit('portfolio:join', user.portfolioSlug);
       setSocket(s);
       return () => {
