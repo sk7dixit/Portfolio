@@ -13,8 +13,8 @@ export default function Login() {
 
   const [entered, setEntered] = useState(true);
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('trinovex@gmail.com');
-  const [password, setPassword] = useState('MSK@181911');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
   const [slug, setSlug] = useState('');
