@@ -134,7 +134,12 @@ io.on('connection', (socket) => {
 
 // Enable CORS with support for credentials
 app.use(cors({
-  origin: '*', // We allow all connections for simplicity in local dev, but in production, we restrict
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, postman)
+    if (!origin) return callback(null, true);
+    // Allow all origins dynamically to support credentials: true
+    callback(null, true);
+  },
   credentials: true,
 }));
 
