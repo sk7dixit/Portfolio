@@ -222,6 +222,20 @@ export const updateProfile = async (req: AuthenticatedRequest, res: Response) =>
     const io = req.app.get('io');
     if (io && req.user?.portfolioSlug) {
       io.to(`portfolio:${req.user.portfolioSlug}`).emit('notification:received', editNotif);
+      io.to(`portfolio:${req.user.portfolioSlug}`).emit('profile:updated', updatedProfile);
+      
+      if (skillsSection !== undefined) {
+        io.to(`portfolio:${req.user.portfolioSlug}`).emit('skills:updated', skillsSection);
+      }
+      if (projectsSection !== undefined) {
+        io.to(`portfolio:${req.user.portfolioSlug}`).emit('projects:updated', { projectsSection });
+      }
+      if (certificatesSection !== undefined) {
+        io.to(`portfolio:${req.user.portfolioSlug}`).emit('certificates:updated', { certificatesSection });
+      }
+      if (internshipsSection !== undefined) {
+        io.to(`portfolio:${req.user.portfolioSlug}`).emit('internships:updated', { internshipsSection });
+      }
     }
 
     return res.status(200).json({
